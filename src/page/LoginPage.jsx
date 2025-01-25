@@ -4,8 +4,8 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 function LoginPage({ getProducts, setIsAuth }) {
   //帳密
   const [account, setAccount] = useState({
-    username: "chris123@gmail.com",
-    password: "MxNfUaqfR497rMX",
+    username: "",
+    password: "",
   });
 
   //點選登入
