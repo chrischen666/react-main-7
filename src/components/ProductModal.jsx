@@ -84,6 +84,10 @@ function ProductModal({
 
   //新增產品
   const createProduct = async () => {
+    if(modalData.origin_price <= 0 || modalData.price <= 0){
+      alert('價格需大於0');
+      return
+    }
     try {
       await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`, {
         data: {
@@ -93,14 +97,17 @@ function ProductModal({
           is_enabled: modalData.is_enabled ? 1 : 0,
         },
       });
-      console.log("123");
       handleCloseProductModal();
     } catch (error) {
-      alert(error, "新增產品失敗");
+      alert(error.response.data.message);
     }
   };
   //編輯產品
   const updateProduct = async () => {
+    if(modalData.origin_price <= 0 || modalData.price <= 0){
+      alert('價格需大於0');
+      return
+    }
     try {
       await axios.put(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${modalData.id}`,
@@ -115,7 +122,7 @@ function ProductModal({
       );
       handleCloseProductModal();
     } catch (error) {
-      alert(error, "新增產品失敗");
+      alert(error.response.data.message);
     }
   };
 
@@ -131,9 +138,7 @@ function ProductModal({
   const handleUpdateProduct = async () => {
     const apiCall = modalMode === "create" ? createProduct : updateProduct;
     try {
-      const res = await apiCall();
-      console.log("API 回傳值:", res); // 檢查回傳值
-      console.log(123); // 這行應該只在 API 成功時執行
+      await apiCall();
       getProducts();
     } catch (error) {
       console.log(error);
@@ -330,6 +335,7 @@ function ProductModal({
                       type="number"
                       className="form-control"
                       placeholder="請輸入原價"
+                      min="0" 
                     />
                   </div>
                   <div className="col-6">
@@ -344,6 +350,7 @@ function ProductModal({
                       type="number"
                       className="form-control"
                       placeholder="請輸入售價"
+                      min="0"
                     />
                   </div>
                 </div>
