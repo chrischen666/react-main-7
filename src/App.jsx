@@ -29,7 +29,7 @@ function App() {
   return (
     <>
       {isAuth ? (
-        <ProductPage getProducts={getProducts} setIsAuth={setIsAuth} pageInfo={pageInfo} setPageInfo={setPageInfo} products={products} setProducts={setProducts}/>
+        <ProductPage getProducts={getProducts}  pageInfo={pageInfo}  products={products} />
       ) : (
         <LoginPage getProducts={getProducts} setIsAuth={setIsAuth}/>
       )}

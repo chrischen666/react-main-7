@@ -141,7 +141,7 @@ function ProductModal({
       await apiCall();
       getProducts();
     } catch (error) {
-      console.log(error);
+
       alert("編輯產品失敗");
     }
   };
@@ -162,7 +162,7 @@ function ProductModal({
         imageUrl: uploadImageUrl,
       });
     } catch (error) {
-      console.log(error);
+      alert('上傳失敗');
     }
   };
   return (

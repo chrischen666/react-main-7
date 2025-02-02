@@ -16,11 +16,9 @@ function LoginPage({ getProducts, setIsAuth }) {
       const { token, expired } = res.data;
       document.cookie = `hexToken=${token}; expires=${new Date(expired)}`;
       axios.defaults.headers.common["Authorization"] = token;
-      console.log(res);
       getProducts();
       setIsAuth(true);
     } catch (error) {
-      console.log(error);
       alert("登入失敗");
     }
   };
@@ -32,7 +30,6 @@ function LoginPage({ getProducts, setIsAuth }) {
       getProducts();
       setIsAuth(true);
     } catch (error) {
-      console.log(error.response);
     }
   };
 

@@ -16,13 +16,11 @@ const defaultModalState = {
   is_enabled: 0,
   imagesUrl: [""],
 };
+
 function ProductPage({
   getProducts,
-  setIsAuth,
   pageInfo,
-  setPageInfo,
   products,
-  setProducts,
 }) {
   //建立開啟狀態
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
