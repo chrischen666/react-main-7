@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Modal } from "bootstrap";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 const API_PATH = import.meta.env.VITE_API_PATH;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { pushMessage } from "../redux/toastSlice";
 
 function RemoveProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
   useEffect(() => {
@@ -11,9 +13,9 @@ function RemoveProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
     });
   }, []);
 
+  const dispatch = useDispatch();
   //  建立刪除ref
   const productDelModalRef = useRef(null);
-
   //觸發刪除產品
   const handleDeleteProduct = async () => {
     await deleteProduct();
@@ -35,8 +37,19 @@ function RemoveProductModal({ tempProduct, getProducts, isOpen, setIsOpen }) {
       await axios.delete(
         `${BASE_URL}/v2/api/${API_PATH}/admin/product/${tempProduct.id}`
       );
+      dispatch(
+        pushMessage({
+          text: "刪除成功",
+          status: "success",
+        })
+      );
     } catch (error) {
-      alert(error, "刪除產品失敗");
+      dispatch(
+        pushMessage({
+          text: "刪除失敗",
+          status: "failed",
+        })
+      );
     }
   };
   //關閉刪除產品

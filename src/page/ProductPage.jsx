@@ -3,6 +3,8 @@ import { Modal } from "bootstrap";
 import Pagination from "../components/pagination";
 import RemoveProductModal from "../components/RemoveProductModal";
 import ProductModal from "../components/ProductModal";
+import Toast from "../components/Toast";
+import axios from "axios";
 
 const defaultModalState = {
   imageUrl: "",
@@ -17,11 +19,9 @@ const defaultModalState = {
   imagesUrl: [""],
 };
 
-function ProductPage({
-  getProducts,
-  pageInfo,
-  products,
-}) {
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+function ProductPage({ getProducts, pageInfo, products, setIsAuth }) {
   //建立開啟狀態
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isDelProductModalOpen, setIsDelProductModalOpen] = useState(false);
@@ -56,9 +56,31 @@ function ProductPage({
     setIsProductModalOpen(true);
   };
 
+  const logout = async () => {
+    try {
+      await axios.post(`${BASE_URL}/v2/logout`);
+      setIsAuth(false);
+    } catch (error) {
+      alert("登出失敗");
+    }
+  };
+
   return (
     <>
       <div className="container py-5">
+        <div className="row mb-3">
+          <div className="justify-content-end">
+            <button
+              onClick={() => {
+                logout();
+              }}
+              type="button"
+              className="btn btn-secondary"
+            >
+              登出
+            </button>
+          </div>
+        </div>
         <div className="row">
           <div className="col">
             <div className="d-flex justify-content-between">
@@ -142,6 +164,7 @@ function ProductPage({
         tempProduct={tempProduct}
         getProducts={getProducts}
       />
+      <Toast />
     </>
   );
 }

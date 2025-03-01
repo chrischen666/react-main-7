@@ -1,6 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Modal } from "bootstrap";
+import { useDispatch } from "react-redux";
+import { pushMessage } from "../redux/toastSlice";
 const API_PATH = import.meta.env.VITE_API_PATH;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const defaultModalState = {
@@ -23,6 +25,8 @@ function ProductModal({
   tempProduct,
   getProducts,
 }) {
+  const dispatch = useDispatch();
+
   //建立useRef
   const productModalRef = useRef(null);
 
@@ -84,9 +88,14 @@ function ProductModal({
 
   //新增產品
   const createProduct = async () => {
-    if(modalData.origin_price <= 0 || modalData.price <= 0){
-      alert('價格需大於0');
-      return
+    if (modalData.origin_price <= 0 || modalData.price <= 0) {
+      dispatch(
+        pushMessage({
+          text: "價格需大於0",
+          status: "failed",
+        })
+      );
+      return;
     }
     try {
       await axios.post(`${BASE_URL}/v2/api/${API_PATH}/admin/product`, {
@@ -98,15 +107,32 @@ function ProductModal({
         },
       });
       handleCloseProductModal();
+      dispatch(
+        pushMessage({
+          text: "新增產品成功",
+          status: "success",
+        })
+      );
     } catch (error) {
-      alert(error.response.data.message);
+      const { message } = error.response.data;
+      dispatch(
+        pushMessage({
+          text: message.join("、"),
+          status: "failed",
+        })
+      );
     }
   };
   //編輯產品
   const updateProduct = async () => {
-    if(modalData.origin_price <= 0 || modalData.price <= 0){
-      alert('價格需大於0');
-      return
+    if (modalData.origin_price <= 0 || modalData.price <= 0) {
+      dispatch(
+        pushMessage({
+          text: "價格需大於0",
+          status: "failed",
+        })
+      );
+      return;
     }
     try {
       await axios.put(
@@ -121,8 +147,20 @@ function ProductModal({
         }
       );
       handleCloseProductModal();
+      dispatch(
+        pushMessage({
+          text: "編輯產品成功",
+          status: "success",
+        })
+      );
     } catch (error) {
-      alert(error.response.data.message);
+      const { message } = error.response.data;
+      dispatch(
+        pushMessage({
+          text: message.join("、"),
+          status: "failed",
+        })
+      );
     }
   };
 
@@ -141,7 +179,6 @@ function ProductModal({
       await apiCall();
       getProducts();
     } catch (error) {
-
       alert("編輯產品失敗");
     }
   };
@@ -162,7 +199,7 @@ function ProductModal({
         imageUrl: uploadImageUrl,
       });
     } catch (error) {
-      alert('上傳失敗');
+      alert("上傳失敗");
     }
   };
   return (
@@ -335,7 +372,7 @@ function ProductModal({
                       type="number"
                       className="form-control"
                       placeholder="請輸入原價"
-                      min="0" 
+                      min="0"
                     />
                   </div>
                   <div className="col-6">

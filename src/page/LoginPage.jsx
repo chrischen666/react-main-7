@@ -19,7 +19,7 @@ function LoginPage({ getProducts, setIsAuth }) {
       getProducts();
       setIsAuth(true);
     } catch (error) {
-      alert("登入失敗");
+
     }
   };
 
@@ -30,6 +30,7 @@ function LoginPage({ getProducts, setIsAuth }) {
       getProducts();
       setIsAuth(true);
     } catch (error) {
+      console.log("登入失敗");
     }
   };
 
